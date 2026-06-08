@@ -1,0 +1,34 @@
+{
+  "templateId": "PROPERTY_SALE_V1",
+  "body": {
+    "agreementDate": "2026-06-05",
+    "property": {
+      "address": "123 Main Street",
+      "city": "Amsterdam",
+      "country": "Netherlands"
+    },
+    "seller": {
+      "fullName": "John Doe",
+      "nationalId": "SELLER-123"
+    },
+    "buyer": {
+      "fullName": "Jane Smith",
+      "nationalId": "BUYER-456"
+    },
+    "sale": {
+      "amount": 250000,
+      "currency": "EUR"
+    }
+  },
+  "signers": [
+    {
+      "walletId": "wallet-1",
+      "role": "SELLER"
+    },
+    {
+      "walletId": "wallet-2",
+      "role": "BUYER"
+    }
+  ]
+
+}

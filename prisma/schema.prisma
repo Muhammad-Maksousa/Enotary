@@ -1,0 +1,157 @@
+// This is your Prisma schema file
+
+generator client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+provider = "postgresql"
+url      = env("DATABASE_URL")
+}
+
+enum TransactionStatus {
+DRAFT
+PENDING_NOTARY
+WAITING_FOR_SIGNERS
+WAITING_FOR_NOTARY_SIGNATURE
+SUBMITTED
+CONFIRMED
+FAILED
+REJECTED
+}
+
+enum UserRole {
+  CITIZEN
+  NOTARY
+  ADMIN
+}
+
+model User {
+  id               String    @id @default(uuid())
+
+  // Identity
+  nationalIdHash   String    @unique
+
+  role             UserRole  @default(CITIZEN)
+
+  // Status
+  isActive         Boolean   @default(true)
+
+  // Activity
+  lastLoginAt      DateTime?
+
+  // Metadata
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relations
+  wallets                Wallet[]
+
+  createdTransactions    Transaction[] @relation("TransactionCreator")
+  notarizedTransactions  Transaction[] @relation("TransactionNotary")
+}
+
+model Wallet {
+id               String    @id @default(uuid())
+
+// Wallet address
+address          String    @unique
+
+// Wallet state
+isActive         Boolean   @default(true)
+
+// Relations
+userId           String
+user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+transactionSigners TransactionSigner[]
+
+// Metadata
+createdAt        DateTime  @default(now())
+updatedAt        DateTime  @updatedAt
+
+@@index([userId])
+}
+
+model Transaction {
+id               String    @id @default(uuid())
+
+// Reference to template stored in DMS
+templateId       String
+
+// Dynamic transaction/document data
+body             Json
+
+// Citizen who created the transaction
+creatorId        String
+creator          User      @relation("TransactionCreator", fields: [creatorId], references: [id])
+
+// Assigned notary
+notaryId         String?
+notary           User?      @relation("TransactionNotary", fields: [notaryId], references: [id])
+
+// Notary workflow
+notaryConfirmedAt DateTime?
+
+// Final notary blockchain signature
+notarySignature  String?
+notarySignedAt   DateTime?
+
+// Blockchain
+chainId          Int?
+contractAddress  String?
+txHash           String?
+
+// Workflow status
+status           TransactionStatus @default(DRAFT)
+
+// Required citizen signers
+signers          TransactionSigner[]
+
+// Metadata
+createdAt        DateTime @default(now())
+updatedAt        DateTime @updatedAt
+
+@@index([creatorId])
+@@index([notaryId])
+@@index([templateId])
+@@index([status])
+}
+
+model TransactionSigner {
+id               String @id @default(uuid())
+
+transactionId    String
+walletId         String
+role             String
+
+transaction      Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+wallet           Wallet      @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+// Null means not signed yet
+signature        String?
+signedAt         DateTime?
+
+createdAt        DateTime @default(now())
+
+@@unique([transactionId, walletId])
+@@index([transactionId])
+@@index([walletId])
+}
+
+model Nonce {
+id               String    @id @default(uuid())
+
+// Authentication nonce
+nonce            String    @unique
+
+// Wallet address
+address          String
+
+// Metadata
+expiresAt        DateTime
+createdAt        DateTime  @default(now())
+
+@@index([address])
+@@index([expiresAt])
+}

@@ -1,0 +1,46 @@
+{
+  "Entity_Not_Found": {
+    "message": "Your Entity is Not Found",
+    "httpStatusCode": 404
+  },
+  "Internal_Server_Error": {
+    "message": "Internal Server Error",
+    "httpStatusCode": 500
+  },
+  "Validation_Error": {
+    "message": "There is a Validation Error",
+    "httpStatusCode": 401
+  },
+  "Page_Not_Found": {
+    "message": "The Page Not Found",
+    "httpStatusCode": 404
+  },
+  "Wrong_Password": {
+    "message": "The password is wrong",
+    "httpStatusCode": 403
+  },
+  "No_Token_Provided": {
+    "message": "You Should Provide your Token",
+    "httpStatusCode": 401
+  },
+  "Not_Authorized": {
+    "message": "You Are Not Authorized",
+    "httpStatusCode": 401
+  },
+  "You_Should_fill_All_The_Filds": {
+    "message": "You Have Invalid Input",
+    "httpStatusCode": 403
+  },
+  "Missing_Value_Field": {
+    "message": "You Missed Value Field",
+    "httpStatusCode": 403
+  },
+  "The_User_Not_Found": {
+    "message": "The User Not Found",
+    "httpStatusCode": 404
+  },
+  "You_Can_Not_Do_This":{
+    "message": "You Can Not Do This Operation",
+    "httpStatusCode": 403
+  }
+}
