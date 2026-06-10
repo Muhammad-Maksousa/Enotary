@@ -31,7 +31,7 @@ model User {
 
   // Identity
   nationalIdHash   String    @unique
-
+  fullName         String    @default("user")
   role             UserRole  @default(CITIZEN)
 
   // Status

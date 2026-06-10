@@ -74,6 +74,7 @@ class TransactionService {
                     select: {
                         id: true,
                         role: true,
+                        fullName: true
                     }
                 },
                 notary: true,
@@ -83,8 +84,17 @@ class TransactionService {
                         role: true,
                         signature: true,
                         signedAt: true,
-                        walletId: true
-                    }
+                        walletId: true,
+                        wallet: {
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 }
             }
         });
@@ -95,19 +105,25 @@ class TransactionService {
         return prisma.transaction.findMany({
             where: {
                 ...(status && { status }),
-
+            },
+            select: {
+                status: true,
+                id: true,
+                templateId: true,
                 signers: {
-                    some: {
+                    select: {
+                        role: true,
                         wallet: {
-                            userId,
-                            isActive: true,
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
+                            },
                         },
                     },
                 },
-            },
-            include: {
-                signers: true,
-                notary: true,
             },
             orderBy: {
                 createdAt: "desc",
@@ -197,23 +213,30 @@ class TransactionService {
     }
 
     async getCreatedTransactions(userId) {
+
         return prisma.transaction.findMany({
             where: {
                 creatorId: userId,
             },
 
-            include: {
+            select: {
+                status: true,
+                id: true,
+                templateId: true,
                 signers: {
-                    include: {
+                    select: {
+                        role: true,
                         wallet: {
-                            include: {
-                                user: true,
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
                             },
                         },
                     },
                 },
-
-                notary: true,
             },
 
             orderBy: {

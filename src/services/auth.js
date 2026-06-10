@@ -81,7 +81,7 @@ class AuthService {
 
 
     // Register
-    async register({ nationalId, message, signature }) {
+    async register({ nationalId, message, signature, fullName}) {
 
         const { address } =
             await this.validateSignature({ message, signature });
@@ -111,6 +111,7 @@ class AuthService {
             await prisma.user.create({
                 data: {
                     nationalIdHash,
+                    fullName,
                     wallets: {
                         create: {
                             address,
@@ -129,7 +130,7 @@ class AuthService {
                 address
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1d" }
+            { expiresIn: "30d" }
         );
 
         return { token, user };
@@ -168,7 +169,7 @@ class AuthService {
                 address
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1d" }
+            { expiresIn: "30d" }
         );
 
         return { token };

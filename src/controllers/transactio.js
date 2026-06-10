@@ -75,7 +75,7 @@ class TransactionController {
 
     async getTransactionsUserCreated(req, res) {
         const { status } = req.query;
-
+        
         const transactions = await new TransactionService().getCreatedTransactions(req.user.userId, status);
         responseSender(res, transactions);
     }

@@ -1,25 +1,36 @@
-/*const CustomError = require("../helpers/errors/custom-errors");
+const CustomError = require("../helpers/errors/custom-errors");
 const errors = require("../helpers/errors/errors.json");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const secretKey = require("../helpers/db/config.secret");
+const prisma = require("../../prisma/client");
+const AuthService = require("./auth");
 
 class UserService {
-    constructor({ username, password}) {
-        this.username = username;
-        this.password = password;
-    }
-    async add() {
-        if (!this.username || !this.password) {
-            throw new CustomError(errors.You_Should_fill_All_The_Filds)
-        }
-        return await User.create({
-            username: this.username,
-            password: this.password,
+
+    async getMyWalletId(message, signature, userId) {
+        
+        const address = await new AuthService().validateSignature({message, signature});
+
+        const wallet = await prisma.wallet.findFirst({
+            where: {
+                userId,
+                isActive: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+            select: {
+                id: true,
+                address: true,
+            },
         });
+
+        if (!wallet) {
+            throw new Error("No active wallet found");
+        }
+
+        return wallet;
     }
-    
-    
+
+
 }
+
 module.exports = UserService;
-*/

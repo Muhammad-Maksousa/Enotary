@@ -24,13 +24,13 @@ class AuthController {
     // Register
     async register(req, res) {
 
-        const { nationalId, message, signature } = req.body;
+        const { nationalId, message, signature, fullName } = req.body;
 
-        if (!nationalId || !message || !signature) {
+        if (!nationalId || !message || !signature || !fullName) {
             throw new CustomError(errors.Missing_Value_Field);
         }
 
-        const result = await new AuthService({}).register({ nationalId, message, signature });
+        const result = await new AuthService({}).register({ nationalId, message, signature, fullName});
 
         ResponseSenderWithToken(
             res,
