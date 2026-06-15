@@ -20,12 +20,14 @@ Public Key: 0x0447b3033a446e81cd5c4bfcf809a3f7831a009ab997499cb565bf70613ddab5b3
 Address: 0x83B2BB1875496A72a43F0245ef763cc0077A3AC6
 Private Key: 0x1d543e9379ee2faa38cbf32b3ccaed48d5dd951e9532e01d20caf536b7b963e0
 Public Key: 0x04b8525c6ebddcf232841b5376594352b6bb35699e8bcc659951bd418a45f9631388ba0c104abb9f1b137d87b23c0973a5158d1bddee6f65d31cf34305f8118bbc
+
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0MWY5NjRhMS03MWIyLTRlMTktYmI5OC1mNzI4OTBhY2NjOWUiLCJ3YWxsZXRJZCI6IjhkNzQ4OWEyLTc4OWEtNDJkYy1iZjMxLTM4YmVmNjYyNzEzYSIsImFkZHJlc3MiOiIweDgzQjJCQjE4NzU0OTZBNzJhNDNGMDI0NWVmNzYzY2MwMDc3QTNBQzYiLCJpYXQiOjE3ODE1Mzc5ODMsImV4cCI6MTc4NDEyOTk4M30.CSYL8e4uulji63MjRaoPzq22LnNzCqdGutEs2PotnJk
  */
-const privateKey = "0x8ad3ef2f199865de05f6d789f0dff9980afc276e129ebde1b6d2744e3d97ccfc";
+const privateKey = "0x1d543e9379ee2faa38cbf32b3ccaed48d5dd951e9532e01d20caf536b7b963e0";
 
 const wallet = new Wallet(privateKey);
 
-const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0xd4CA79B4AaDD7c7616D7Fb8d3188c55BAbC5c8Fc\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 11155111\nNonce: MUzZZp26wh5fYiDmw\nIssued At: 2026-06-10T22:07:40.853Z`;
+const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x83B2BB1875496A72a43F0245ef763cc0077A3AC6\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 11155111\nNonce: zPkrEBbvv0C1np2xZ\nIssued At: 2026-06-15T15:50:42.732Z`;
 
 async function main() {
 

@@ -3,6 +3,7 @@ const secretKey = require("../helpers/db/config.secret");
 const CustomError = require("../helpers/errors/custom-errors");
 const errors = require("../helpers/errors/errors.json");
 const Role = require("../helpers/roles");
+const prisma = require('../../prisma/client');
 
 const verifyUserToken = async (req, res, next) => {
 
