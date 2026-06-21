@@ -51,7 +51,56 @@ const verifyUserToken = async (req, res, next) => {
 
     next();
 };
+
+
+const verifyNotaryToken = async (req, res, next) => {
+
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        throw new CustomError(
+            errors.No_Token_Provided
+        );
+    }
+
+    const token = authHeader.startsWith("Bearer ")
+        ? authHeader.split(" ")[1]
+        : authHeader;
+
+    const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET
+    );
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: decoded.userId
+        },
+        include: {
+            wallets: {
+                where: {
+                    isActive: true
+                }
+            }
+        }
+    });
+
+    if (!user || !user.isActive || user.role !== Role.NOTARY) {
+        throw new CustomError(
+            errors.Not_Authorized
+        );
+    }
+
+    req.user = {
+        userId: user.id,
+        role: user.role,
+        wallets: user.wallets
+    };
+
+    next();
+};
 module.exports = {
     verifyUserToken: verifyUserToken,
+    verifyNotaryToken: verifyNotaryToken
 };
 

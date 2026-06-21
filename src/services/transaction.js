@@ -1,5 +1,7 @@
 const prisma = require("../../prisma/client");
-
+const CustomError = require("../helpers/errors/custom-errors");
+const Error = require("../helpers/errors/errors.json");
+const transactionStatus = require("../helpers/transactionStatus");
 class TransactionService {
 
     async create({ creatorId, templateId, body, signers }) {
@@ -77,7 +79,13 @@ class TransactionService {
                         fullName: true
                     }
                 },
-                notary: true,
+                notary: {
+                    select: {
+                        id: true,
+                        role: true,
+                        fullName: true
+                    }
+                },
                 signers: {
                     select: {
                         id: true,
@@ -203,13 +211,14 @@ class TransactionService {
             throw new Error("Transaction already claimed");
         }
 
-        return prisma.transaction.update({
+        prisma.transaction.update({
             where: { id: transactionId },
             data: {
                 notaryId,
-                status: "asd"
+                status: transactionStatus.CLAIMED_BY_NOTARY
             }
         });
+        return "Transaction Claimed By Notary Successfully";
     }
 
     async getCreatedTransactions(userId) {
@@ -243,6 +252,61 @@ class TransactionService {
                 createdAt: 'desc',
             },
         });
+    }
+
+    async getNotaryTransactions(notaryId) {
+        return prisma.transaction.findMany({
+            where: {
+                notaryId: notaryId,
+            },
+
+            select: {
+                status: true,
+                id: true,
+                templateId: true,
+                signers: {
+                    select: {
+                        role: true,
+                        wallet: {
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+    }
+
+    async notaryAction(id, action, notaryId) {
+        const transaction = await prisma.transaction.findUnique({
+            where: { id }
+        });
+
+        if (transaction.notaryId !== notaryId)
+            throw new CustomError(Error.Not_Authorized);
+
+        let notaryAction;
+        if (action == "ACCEPT")
+            notaryAction = transactionStatus.WAITING_FOR_SIGNERS;
+        else
+            notaryAction = transactionStatus.REJECTED;
+
+        prisma.transaction.update({
+            where: { id },
+            data: {
+                status: notaryAction
+            }
+        });
+        return "Notary Action Completed Successfully";
     }
 }
 

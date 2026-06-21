@@ -1,6 +1,9 @@
-const user = 'user';
-const admin = 'admin';
-const superAdmin = 'superAdmin';
+const CITIZEN = 'CITIZEN';
+const NOTARY = 'NOTARY';
+const ADMIN = 'ADMIN';
 module.exports = {
-    user,admin,superAdmin
+    ADMIN, NOTARY, CITIZEN
 };
+
+
+

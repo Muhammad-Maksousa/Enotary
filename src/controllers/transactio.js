@@ -17,7 +17,6 @@ class TransactionController {
         if (signers.length === 0) {
             throw new CustomError(errors.Invalid_Signers);
         }
-        //get this userId from the token
         const result = await new TransactionService().create({
             creatorId: req.user.userId,
             templateId,
@@ -25,6 +24,11 @@ class TransactionController {
             signers
         });
 
+        responseSender(res, result);
+    }
+    async claim(req, res) {
+        const { body } = req;
+        const result = await new TransactionService().claim(body.transactionId, req.user.userId);
         responseSender(res, result);
     }
 
@@ -75,9 +79,25 @@ class TransactionController {
 
     async getTransactionsUserCreated(req, res) {
         const { status } = req.query;
-        
+
         const transactions = await new TransactionService().getCreatedTransactions(req.user.userId, status);
         responseSender(res, transactions);
+    }
+
+    async getNotaryTransactions(req, res) {
+
+        const transactions = await new TransactionService().getNotaryTransactions(req.user.userId);
+        responseSender(res, transactions);
+    }
+
+    async notaryAction(req, res) {
+        const { transactionId, action } = req.body;
+        
+        if (action != "ACCEPT" && action != "REJECT")
+            throw new CustomError(errors.Validation_Error);
+
+        const result = await new TransactionService().notaryAction(transactionId, action, req.user.userId);
+        responseSender(res, result);
     }
 }
 

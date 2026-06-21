@@ -4,13 +4,9 @@ const cors = require("cors");
 const app = express();
 
 
-// MIDDLEWARE
-
-// Dev-only CORS setup
-// ⚠️ IMPORTANT: REMOVE "*" OR REPLACE WITH WHITELISTED DOMAINS IN PRODUCTION
 app.use(
   cors({
-    origin: "*", // 🚧 DEV ONLY — DO NOT USE IN PRODUCTION
+    origin: "*", // DEV ONLY — DO NOT USE IN PRODUCTION
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -25,7 +21,6 @@ app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
 app.use(require("./routers"));
 
-// ERROR HANDLER
 app.use(require("./helpers/errors/custom-errors").defaultHandler);
 
 const PORT = process.env.PORT || 3000;
@@ -36,7 +31,6 @@ const startServer = async () => {
       console.log(`Server running on port ${PORT}`);
     });
 
-    // Optional: handle unexpected server errors
     server.on("error", (err) => {
       console.error("Server error:", err);
     });
