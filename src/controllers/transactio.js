@@ -3,7 +3,7 @@ const CustomError = require("../helpers/errors/custom-errors");
 const errors = require("../helpers/errors/errors.json");
 const { TransactionStatus } = require('@prisma/client');
 const { ResponseSenderWithToken, responseSender } = require("../helpers/wrappers/response-sender");
-
+const { TEMPLATES } = require("../helpers/templates");
 class TransactionController {
 
     async create(req, res) {
@@ -92,12 +92,40 @@ class TransactionController {
 
     async notaryAction(req, res) {
         const { transactionId, action } = req.body;
-        
+
         if (action != "ACCEPT" && action != "REJECT")
             throw new CustomError(errors.Validation_Error);
 
         const result = await new TransactionService().notaryAction(transactionId, action, req.user.userId);
         responseSender(res, result);
+    }
+
+    async getTemplates(req, res) {
+        const templates = [{
+            "templateId": "PROPERTY_SALE_V1",
+            "name": "Property Sale"
+        }, {
+            "templateId": "Vehicle_SALE_V1",
+            "name": "Vehicle Sale"
+        }, {
+            "templateId": "GENERAL_POWER_V1",
+            "name": "General Power"
+        }]
+        responseSender(res, templates);
+    }
+
+    async getTemplateById(req, res) {
+        const { id } = req.params;
+        let template;
+        
+        if (id == "PROPERTY_SALE_V1")
+            template = TEMPLATES.PROPERTY_SALE_V1;
+        else if (id == "GENERAL_POWER_OF_ATTORNEY_V1")
+            template = TEMPLATES.GENERAL_POWER_OF_ATTORNEY_V1
+        else if (id == "VEHICLE_TRANSFER_V1")
+            template = TEMPLATES.VEHICLE_TRANSFER_V1
+
+        responseSender(res, template);
     }
 }
 
