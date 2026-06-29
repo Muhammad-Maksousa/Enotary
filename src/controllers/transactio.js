@@ -105,10 +105,10 @@ class TransactionController {
             "templateId": "PROPERTY_SALE_V1",
             "name": "Property Sale"
         }, {
-            "templateId": "Vehicle_SALE_V1",
+            "templateId": "VEHICLE_TRANSFER_V1",
             "name": "Vehicle Sale"
         }, {
-            "templateId": "GENERAL_POWER_V1",
+            "templateId": "GENERAL_POWER_OF_ATTORNEY_V1",
             "name": "General Power"
         }]
         responseSender(res, templates);
@@ -121,9 +121,9 @@ class TransactionController {
         if (id == "PROPERTY_SALE_V1")
             template = TEMPLATES.PROPERTY_SALE_V1;
         else if (id == "GENERAL_POWER_OF_ATTORNEY_V1")
-            template = TEMPLATES.GENERAL_POWER_OF_ATTORNEY_V1
+            template = TEMPLATES.GENERAL_POWER_OF_ATTORNEY_V1;
         else if (id == "VEHICLE_TRANSFER_V1")
-            template = TEMPLATES.VEHICLE_TRANSFER_V1
+            template = TEMPLATES.VEHICLE_TRANSFER_V1;
 
         responseSender(res, template);
     }
