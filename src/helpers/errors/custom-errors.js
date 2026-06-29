@@ -1,5 +1,5 @@
 const { Prisma } = require("@prisma/client");
-
+const { ResponseSenderWithToken, responseSender } = require("../wrappers/response-sender");
 class CustomError extends Error {
     constructor({ message, httpStatusCode }) {
         super(message);
@@ -14,7 +14,9 @@ class CustomError extends Error {
         console.log(
             err instanceof CustomError
         );
-
+        responseSender(res,err,"Error",err.httpStatusCode)
+        
+        /*
         if (err instanceof CustomError) {
             return res.status(
                 err.httpStatusCode
@@ -29,6 +31,7 @@ class CustomError extends Error {
             message: "Internal Server Error",
             statusCode: 500,
         });
+    }*/
     }
 }
 
