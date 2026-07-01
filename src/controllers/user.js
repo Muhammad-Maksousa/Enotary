@@ -6,12 +6,14 @@ const { ResponseSenderWithToken, updateResponseSender, responseSender } = requir
 module.exports = {
     getMyWalletId: async (req, res) => {
         const { message, signature } = req.body;
-        console.log(message);
-        console.log(signature);
-        
         const result = await new UserService().getMyWalletId(message, signature, req.user.userId);
 
         responseSender(res, result);
+    },
+
+    profile: async (req,res) =>{
+        const result = await new UserService().getProfile(req.user.userId);
+        responseSender(res,result);
     }
 
 };
