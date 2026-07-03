@@ -117,7 +117,7 @@ class TransactionController {
     async getTemplateById(req, res) {
         const { id } = req.params;
         let template;
-        
+
         if (id == "PROPERTY_SALE_V1")
             template = TEMPLATES.PROPERTY_SALE_V1;
         else if (id == "GENERAL_POWER_OF_ATTORNEY_V1")
@@ -126,6 +126,11 @@ class TransactionController {
             template = TEMPLATES.VEHICLE_TRANSFER_V1;
 
         responseSender(res, template);
+    }
+
+    async getMyAllTransactions(req, res) {
+        const result = await new TransactionService().getMyAllTransactions(req.user.userId);
+        responseSender(res, result);
     }
 }
 

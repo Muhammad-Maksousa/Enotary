@@ -9,6 +9,7 @@ router.post("/claim", apiHandler(verifyNotaryToken), apiHandler(controller.claim
 router.post("/notaryAction", apiHandler(verifyNotaryToken), apiHandler(controller.notaryAction));
 router.get("/created", apiHandler(verifyUserToken), apiHandler(controller.getTransactionsUserCreated));
 router.get("/notaryArchive", apiHandler(verifyNotaryToken), apiHandler(controller.getNotaryTransactions));
+router.get("/allMine",apiHandler(verifyUserToken),apiHandler(controller.getMyAllTransactions));
 router.get("/templates", apiHandler(controller.getTemplates));
 router.get("/template/:id", apiHandler(controller.getTemplateById));
 router.get("/:id", apiHandler(controller.getById));

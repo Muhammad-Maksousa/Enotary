@@ -11,9 +11,14 @@ module.exports = {
         responseSender(res, result);
     },
 
-    profile: async (req,res) =>{
+    profile: async (req, res) => {
         const result = await new UserService().getProfile(req.user.userId);
-        responseSender(res,result);
+        responseSender(res, result);
+    },
+    makeNotary: async (req, res) => {
+        const { walletAddress } = req.params;
+        const result = await new UserService().makeNotary(walletAddress);
+        responseSender(res,"Role Updated Successfully");
     }
 
 };
