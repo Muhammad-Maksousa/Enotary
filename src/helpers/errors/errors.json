@@ -3,6 +3,10 @@
     "message": "Your Entity is Not Found",
     "httpStatusCode": 404
   },
+  "Transaction_Not_Found": {
+    "message": "Transaction Not Found",
+    "httpStatusCode": 404
+  },
   "Internal_Server_Error": {
     "message": "Internal Server Error",
     "httpStatusCode": 500
@@ -42,5 +46,10 @@
   "You_Can_Not_Do_This":{
     "message": "You Can Not Do This Operation",
     "httpStatusCode": 403
+  },
+  "Transaction_Already_Claimed":{
+    "message": "Transaction Already Claimed",
+    "httpStatusCode": 403
   }
+
 }

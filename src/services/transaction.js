@@ -204,7 +204,7 @@ class TransactionService {
             });
 
         if (!transaction) {
-            throw new CustomError("Transaction not found");
+            throw new CustomError(Error.Transaction_Not_Found);
         }
 
         if (transaction.notaryId) {
