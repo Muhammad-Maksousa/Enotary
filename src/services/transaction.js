@@ -304,7 +304,8 @@ class TransactionService {
         await prisma.transaction.update({
             where: { id },
             data: {
-                status: notaryAction
+                status: notaryAction,
+                notaryConfirmedAt: new Date()
             }
         });
         return "Notary Action Completed Successfully";
@@ -411,8 +412,10 @@ class TransactionService {
     }
 
     async getAllTransactionsByWalletAddress(walletAddress) {
-
-
+        console.log("wallet address: ");
+        
+        console.log(walletAddress);
+        
         const wallet = await prisma.wallet.findUnique({
             where: { address: walletAddress },
         });
