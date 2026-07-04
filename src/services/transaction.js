@@ -204,11 +204,11 @@ class TransactionService {
             });
 
         if (!transaction) {
-            throw new Error("Transaction not found");
+            throw new CustomError("Transaction not found");
         }
 
         if (transaction.notaryId) {
-            throw new Error("Transaction already claimed");
+            throw new CustomError("Transaction already claimed");
         }
 
         prisma.transaction.update({
@@ -307,6 +307,158 @@ class TransactionService {
             }
         });
         return "Notary Action Completed Successfully";
+    }
+
+    async getMyAllTransactions(userId) {
+        return await prisma.transaction.findMany({
+            where: {
+                OR: [
+                    {
+                        creatorId: userId,
+                    },
+                    {
+                        signers: {
+                            some: {
+                                wallet: {
+                                    userId: userId,
+                                },
+                            },
+                        },
+                    },
+                ],
+            },
+
+            select: {
+                status: true,
+                id: true,
+                templateId: true,
+                signers: {
+                    select: {
+                        role: true,
+                        wallet: {
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
+
+    async getAllTransactionsByNid(NID) {
+        return await prisma.transaction.findMany({
+            where: {
+                OR: [
+                    {
+                        creator: {
+                            nationalIdHash: nationalIdHash,
+                        },
+                    },
+                    {
+                        signers: {
+                            some: {
+                                wallet: {
+                                    user: {
+                                        nationalIdHash: nationalIdHash,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                ],
+            },
+
+            select: {
+                status: true,
+                id: true,
+                templateId: true,
+                signers: {
+                    select: {
+                        role: true,
+                        wallet: {
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
+
+    async getAllTransactionsByWalletAddress(walletAddress) {
+        return await prisma.transaction.findMany({
+            where: {
+                OR: [
+                    {
+                        creatorId: userId,
+                    },
+                    {
+                        signers: {
+                            some: {
+                                wallet: {
+                                    address: walletAddress,
+                                },
+                            },
+                        },
+                    },
+                ],
+            },
+
+            select: {
+                status: true,
+                id: true,
+                templateId: true,
+                signers: {
+                    select: {
+                        role: true,
+                        wallet: {
+                            select: {
+                                user: {
+                                    select: {
+                                        fullName: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
+
+    async getTheNumberOfTransactionsByStatus(status) {
+        return await prisma.transaction.count({
+            where: {
+                status
+            },
+        });
+
+        return {
+            status,
+            count,
+        };
     }
 }
 

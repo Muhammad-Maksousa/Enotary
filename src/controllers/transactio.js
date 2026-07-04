@@ -132,6 +132,26 @@ class TransactionController {
         const result = await new TransactionService().getMyAllTransactions(req.user.userId);
         responseSender(res, result);
     }
+
+    async getAlltransactionsByNID(req, res) {
+        const { NID } = req.params;
+        const result = await new TransactionService().getAllTransactionsByNid(NID);
+        responseSender(res, result);
+    }
+
+    async getAlltransactionsBywalletAddress(req, res) {
+        const { walletAddress } = req.params;
+        const result = await new TransactionService().getAllTransactionsByWalletAddress(walletAddress);
+        responseSender(res, result);
+
+    }
+
+    async getTransactionStatsByStatus(req, res) {
+        const { status } = req.params;
+        const result = await new TransactionService().getTheNumberOfTransactionsByStatus(status);
+        responseSender(res, result);
+    }
+
 }
 
 module.exports = new TransactionController();

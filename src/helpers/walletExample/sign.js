@@ -31,11 +31,17 @@ id: 8d7489a2-789a-42dc-bf31-38bef662713a
 address: 0x83B2BB1875496A72a43F0245ef763cc0077A3AC6
 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0MWY5NjRhMS03MWIyLTRlMTktYmI5OC1mNzI4OTBhY2NjOWUiLCJ3YWxsZXRJZCI6IjhkNzQ4OWEyLTc4OWEtNDJkYy1iZjMxLTM4YmVmNjYyNzEzYSIsImFkZHJlc3MiOiIweDgzQjJCQjE4NzU0OTZBNzJhNDNGMDI0NWVmNzYzY2MwMDc3QTNBQzYiLCJpYXQiOjE3ODE1Mzc5ODMsImV4cCI6MTc4NDEyOTk4M30.CSYL8e4uulji63MjRaoPzq22LnNzCqdGutEs2PotnJk
  */
-const privateKey = "0x2e76459313fca3f6e0912afb850aeb6f09b5d21fb770dd2303b9cfe365305d12";
+
+/*online notary
+address: 0xfC0f50a91D4Cebd05797739325cCBfF7d743f3B8
+private: 0xe5c49a26251184c1f913aa422f816c57b75db918e530a2e64f0526d87901f5d9
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0N2FiMTZkMC0zZWQ1LTRjZDctYWFkMC00MTdiNDMwYzM5NDkiLCJ3YWxsZXRJZCI6Ijc1MDI1ZTc0LTk0NzUtNDRhNS04NjhhLWZmNWM4MzU5ZWM3YiIsImFkZHJlc3MiOiIweGZDMGY1MGE5MUQ0Q2ViZDA1Nzk3NzM5MzI1Y0NCZkY3ZDc0M2YzQjgiLCJpYXQiOjE3ODMxNzIzMDYsImV4cCI6MTc4NTc2NDMwNn0.wn86s9dmSHpdc4tJOsLaHWJwMTIcC_HC5G3N0AN503M
+*/
+const privateKey = "0xe5c49a26251184c1f913aa422f816c57b75db918e530a2e64f0526d87901f5d9";
 
 const wallet = new Wallet(privateKey);
 
-const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x8552237949170E17bCCBCba8a3A223EF2331f1c0\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 11155111\nNonce: 9T4b81jSWX59mWlNm\nIssued At: 2026-06-20T08:44:30.538Z`;
+const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0xfC0f50a91D4Cebd05797739325cCBfF7d743f3B8\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 11155111\nNonce: oq2dLfGVCa1cFcFCA\nIssued At: 2026-07-04T13:37:14.568Z`;
 
 async function main() {
 
