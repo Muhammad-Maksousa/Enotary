@@ -415,19 +415,15 @@ class TransactionService {
                 OR: [
                     {
                         signers: {
-                            some: {
-                                wallet: {
-                                    address: walletAddress,
-                                },
+                            wallet: {
+                                address: walletAddress,
                             },
                         },
                     },
                     {
                         creator: {
                             wallets: {
-                                some: {
-                                    address: walletAddress,
-                                },
+                                address: walletAddress,
                             },
                         },
                     },
