@@ -11,8 +11,8 @@ router.get("/created", apiHandler(verifyUserToken), apiHandler(controller.getTra
 router.get("/notaryArchive", apiHandler(verifyNotaryToken), apiHandler(controller.getNotaryTransactions));
 router.get("/allMine",apiHandler(verifyUserToken),apiHandler(controller.getMyAllTransactions));
 router.get("/allByNid/:NID",apiHandler(verifyUserToken),apiHandler(controller.getAlltransactionsByNID));
-router.get("/allByNid/:walletAddress",apiHandler(verifyUserToken),apiHandler(controller.getAlltransactionsBywalletAddress));
-router.get("/stats/:status",apiHandler(verifyUserToken),apiHandler(controller.getAlltransactionsBywalletAddress));
+router.get("/allByWalletAddress/:walletAddress",apiHandler(verifyUserToken),apiHandler(controller.getAlltransactionsBywalletAddress));
+router.get("/stats/:status",apiHandler(verifyUserToken),apiHandler(controller.getTransactionStatsByStatus));
 router.get("/templates", apiHandler(controller.getTemplates));
 router.get("/template/:id", apiHandler(controller.getTemplateById));
 router.get("/:id", apiHandler(controller.getById));
