@@ -208,7 +208,7 @@ class TransactionService {
         }
 
         if (transaction.notaryId) {
-            throw new CustomError("Transaction already claimed");
+            throw new CustomError(Error.Transaction_Already_Claimed);
         }
 
         prisma.transaction.update({
