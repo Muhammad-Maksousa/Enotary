@@ -300,7 +300,7 @@ class TransactionService {
         else
             notaryAction = transactionStatus.REJECTED;
 
-        prisma.transaction.update({
+        await prisma.transaction.update({
             where: { id },
             data: {
                 status: notaryAction
@@ -410,20 +410,25 @@ class TransactionService {
     }
 
     async getAllTransactionsByWalletAddress(walletAddress) {
+
         return await prisma.transaction.findMany({
             where: {
                 OR: [
                     {
                         signers: {
-                            wallet: {
-                                address: walletAddress,
+                            some: {
+                                wallet: {
+                                    address: walletAddress,
+                                },
                             },
                         },
                     },
                     {
                         creator: {
                             wallets: {
-                                address: walletAddress,
+                                some: {
+                                    address: walletAddress,
+                                },
                             },
                         },
                     },
