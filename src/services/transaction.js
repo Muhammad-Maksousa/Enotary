@@ -211,8 +211,8 @@ class TransactionService {
             throw new CustomError(Error.Transaction_Already_Claimed);
         }
 
-        prisma.transaction.update({
-            where: { id: transactionId },
+        await prisma.transaction.update({
+            where: { id: transaction.id },
             data: {
                 notaryId,
                 status: transactionStatus.CLAIMED_BY_NOTARY
