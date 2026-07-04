@@ -355,6 +355,12 @@ class TransactionService {
     }
 
     async getAllTransactionsByNid(NID) {
+
+        const nationalIdHash = crypto
+            .createHash("sha256")
+            .update(NID + process.env.NATIONAL_ID_SALT)
+            .digest("hex");
+
         return await prisma.transaction.findMany({
             where: {
                 OR: [
@@ -408,12 +414,18 @@ class TransactionService {
             where: {
                 OR: [
                     {
-                        creatorId: userId,
-                    },
-                    {
                         signers: {
                             some: {
                                 wallet: {
+                                    address: walletAddress,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        creator: {
+                            wallets: {
+                                some: {
                                     address: walletAddress,
                                 },
                             },
