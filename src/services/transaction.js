@@ -2,6 +2,7 @@ const prisma = require("../../prisma/client");
 const CustomError = require("../helpers/errors/custom-errors");
 const Error = require("../helpers/errors/errors.json");
 const transactionStatus = require("../helpers/transactionStatus");
+const crypto = require("node:crypto");
 class TransactionService {
 
     async create({ creatorId, templateId, body, signers }) {
@@ -410,6 +411,30 @@ class TransactionService {
     }
 
     async getAllTransactionsByWalletAddress(walletAddress) {
+
+
+        const wallet = await prisma.wallet.findUnique({
+            where: { address: walletAddress },
+        });
+        console.log("wallet: ");
+        
+        console.log(wallet);
+
+        const tx = await prisma.transaction.findMany({
+            where: {
+                signers: {
+                    some: {
+                        wallet: {
+                            address: walletAddress,
+                        },
+                    },
+                },
+            },
+        });
+        console.log("tx length: ");
+
+        console.log(tx.length);
+
 
         return await prisma.transaction.findMany({
             where: {
