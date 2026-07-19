@@ -152,6 +152,18 @@ class TransactionController {
         responseSender(res, result);
     }
 
+    async getFinal(req, res) {
+        const { walletAddress, transactionId } = req.body;
+        const result = await new TransactionService().getFinal(transactionId, walletAddress);
+        responseSender(res, result);
+    }
+
+    async signedTransaction(req, res) {
+        const { walletAddress, transactionId, signature } = req.body;
+        const result = await new TransactionService().signedTransaction(transactionId, walletAddress, signature);
+        responseSender(res, result);
+    }
+
 }
 
 module.exports = new TransactionController();

@@ -4,6 +4,7 @@ const { Wallet } = require("ethers");
 Address: 0x2F6332083e5608B18B908956240E322CC48057CF
 Private Key: 0x597e1a6216ac0f00107c32fa6b8acb6ffa5e5d3063cf76bd099aa1d102d6d605
 Public Key: 0x045c75bbc5a46f46a667a3de45f1beceb04a4bc9dcacaf67d98908d1c1675e4726c4ade1ae9122a4c23ec9578f455d05d8dfe67e9223a45c455a21de5d50af4426
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjYjQ4ZmJiOC1iNDYzLTQ3MzItYTVmZS0xNjkxYmVmMmYzY2EiLCJ3YWxsZXRJZCI6ImE1NzNjMzAyLTJhN2MtNDk0MC05MWM2LTYwOGUxMWE0YWViMCIsImFkZHJlc3MiOiIweDJGNjMzMjA4M2U1NjA4QjE4QjkwODk1NjI0MEUzMjJDQzQ4MDU3Q0YiLCJpYXQiOjE3ODQ0MDYyMjQsImV4cCI6MTc4Njk5ODIyNH0.y6Vv_5b5EoIZV2lbip2JaXhETsMHo_1UvhqaoC1S2Z0
 */
 
 
@@ -37,11 +38,11 @@ address: 0xfC0f50a91D4Cebd05797739325cCBfF7d743f3B8
 private: 0xe5c49a26251184c1f913aa422f816c57b75db918e530a2e64f0526d87901f5d9
 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0N2FiMTZkMC0zZWQ1LTRjZDctYWFkMC00MTdiNDMwYzM5NDkiLCJ3YWxsZXRJZCI6Ijc1MDI1ZTc0LTk0NzUtNDRhNS04NjhhLWZmNWM4MzU5ZWM3YiIsImFkZHJlc3MiOiIweGZDMGY1MGE5MUQ0Q2ViZDA1Nzk3NzM5MzI1Y0NCZkY3ZDc0M2YzQjgiLCJpYXQiOjE3ODMxNzIzMDYsImV4cCI6MTc4NTc2NDMwNn0.wn86s9dmSHpdc4tJOsLaHWJwMTIcC_HC5G3N0AN503M
 */
-const privateKey = "0xe5c49a26251184c1f913aa422f816c57b75db918e530a2e64f0526d87901f5d9";
+const privateKey = "0x597e1a6216ac0f00107c32fa6b8acb6ffa5e5d3063cf76bd099aa1d102d6d605";
 
 const wallet = new Wallet(privateKey);
 
-const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0xfC0f50a91D4Cebd05797739325cCBfF7d743f3B8\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 11155111\nNonce: oq2dLfGVCa1cFcFCA\nIssued At: 2026-07-04T13:37:14.568Z`;
+const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x2F6332083e5608B18B908956240E322CC48057CF\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 1337\nNonce: P1OR9AAr2ihpxP5IT\nIssued At: 2026-07-18T20:21:59.504Z`;
 
 async function main() {
 

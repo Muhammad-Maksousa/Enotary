@@ -50,6 +50,10 @@
   "Transaction_Already_Claimed":{
     "message": "Transaction Already Claimed",
     "httpStatusCode": 403
+  },
+  "Wallet_Already_Signed":{
+    "message": "This Wallet Already Signed",
+    "httpStatusCode": 403
   }
 
 }

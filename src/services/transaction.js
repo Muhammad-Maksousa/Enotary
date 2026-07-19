@@ -3,6 +3,10 @@ const CustomError = require("../helpers/errors/custom-errors");
 const Error = require("../helpers/errors/errors.json");
 const transactionStatus = require("../helpers/transactionStatus");
 const crypto = require("node:crypto");
+const { ethers } = require("ethers");
+const { error } = require("node:console");
+const CHAIN_ID = Number(process.env.CHAIN_ID);
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 class TransactionService {
 
     async create({ creatorId, templateId, body, signers }) {
@@ -413,14 +417,14 @@ class TransactionService {
 
     async getAllTransactionsByWalletAddress(walletAddress) {
         console.log("wallet address: ");
-        
+
         console.log(walletAddress);
-        
+
         const wallet = await prisma.wallet.findUnique({
             where: { address: walletAddress },
         });
         console.log("wallet: ");
-        
+
         console.log(wallet);
 
         const tx = await prisma.transaction.findMany({
@@ -500,6 +504,196 @@ class TransactionService {
             status,
             count,
         };
+    }
+
+    async getFinal(transactionId, walletAddress) {
+        const transaction = await prisma.transaction.findUnique({
+            where: {
+                id: transactionId
+            }
+        });
+
+        if (!transaction) {
+            throw new CustomError(Error.Transaction_Not_Found);
+        }
+
+        if (transaction.status !== transactionStatus.WAITING_FOR_SIGNERS) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        const wallet = await prisma.wallet.findUnique({
+            where: {
+                address: walletAddress
+            }
+        });
+
+
+        if (!wallet) {
+            throw new CustomError(Error.The_User_Not_Found);
+        }
+
+        const transactionSigner = await prisma.transactionSigner.findUnique({
+            where: {
+                transactionId_walletId: {
+                    transactionId: transaction.id,
+                    walletId: wallet.id
+                }
+            }
+        });
+
+
+        if (!transactionSigner) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        if (transactionSigner.signature) {
+            throw new CustomError(Error.Wallet_Already_Signed);
+        }
+
+        let documentHash = transaction.txHash;
+
+        if (!documentHash) {
+
+            documentHash = this.hashDocument(transaction.body);
+
+            await prisma.transaction.update({
+                where: {
+                    id: transaction.id
+                },
+
+                data: {
+                    txHash: documentHash,
+                    chainId: CHAIN_ID,
+                    contractAddress: CONTRACT_ADDRESS
+                }
+            });
+        }
+
+        const domain = {
+            name: "Digital Notary",
+            version: "1",
+            chainId: CHAIN_ID,
+            verifyingContract: CONTRACT_ADDRESS
+        };
+
+        const types = {
+            Document: [
+                {
+                    name: "transactionId",
+                    type: "string"
+                },
+                {
+                    name: "transactionSignerId",
+                    type: "string"
+                },
+                {
+                    name: "documentHash",
+                    type: "bytes32"
+                },
+                {
+                    name: "role",
+                    type: "string"
+                }
+            ]
+        };
+        
+        const message = {
+            transactionId: transaction.id,
+            transactionSignerId: transactionSigner.id,
+            documentHash: `0x${documentHash}`,
+            role: transactionSigner.role
+        };
+        
+        return {
+            domain,
+            types,
+            primaryType: "Document",
+            message
+        };
+
+    }
+
+    async signedTransaction(transactionId, walletAddress, signature) {
+
+        const transaction =
+            await prisma.transaction.findUnique({
+                where: { id: transactionId }
+            });
+
+
+        if (!transaction) {
+            throw new CustomError(Error.Transaction_Not_Found);
+        }
+
+        const wallet =
+            await prisma.wallet.findUnique({
+                where: {
+                    address: walletAddress
+                }
+            });
+
+        if (!wallet) {
+            throw new CustomError(Error.The_User_Not_Found);
+        }
+
+        const transactionSigner = await prisma.transactionSigner.findUnique({
+            where: {
+                transactionId_walletId: {
+                    transactionId,
+                    walletId: wallet.id
+                }
+            }
+        });
+
+
+        if (!transactionSigner) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        if (transactionSigner.signature) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        const signData = await this.getFinal(transactionId, walletAddress);
+
+        
+        const recoveredAddress =
+            ethers.verifyTypedData(
+                signData.domain,
+                signData.types,
+                signData.message,
+                signature
+            );
+
+            
+        if (recoveredAddress !== wallet.address) {
+            throw new CustomError(Error.Validation_Error);
+        }
+
+        await prisma.transactionSigner.update({
+            where: {
+                id: transactionSigner.id
+            },
+            data: {
+                signature,
+                signedAt: new Date()
+            }
+        });
+
+        return { success: true };
+    }
+
+    hashDocument(body) {
+
+        const json = JSON.stringify(
+            body,
+            Object.keys(body).sort()
+        );
+
+        return crypto
+            .createHash("sha256")
+            .update(json)
+            .digest("hex");
     }
 }
 

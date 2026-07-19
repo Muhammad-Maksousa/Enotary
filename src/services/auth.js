@@ -7,7 +7,6 @@ const prisma = require("../../prisma/client");
 
 class AuthService {
 
-    // Generate SIWE message
     async generateSiweMessage(walletAddress) {
 
         const address = getAddress(walletAddress);
@@ -20,7 +19,7 @@ class AuthService {
             statement: "Sign in to backend",
             uri: process.env.APP_URI,
             version: "1",
-            chainId: 11155111,
+            chainId: 1337,
             nonce,
         });
 
@@ -38,7 +37,6 @@ class AuthService {
     }
 
 
-    // Shared SIWE verification
     async validateSignature({ message, signature }) {
 
         const siweMessage = new SiweMessage(message);
@@ -80,7 +78,6 @@ class AuthService {
     }
 
 
-    // Register
     async register({ nationalId, message, signature, fullName}) {
 
         const { address } =
@@ -137,7 +134,6 @@ class AuthService {
     }
 
 
-    // Login
     async login({ message, signature }) {
 
         const { address } =
