@@ -596,14 +596,14 @@ class TransactionService {
                 }
             ]
         };
-        
+
         const message = {
             transactionId: transaction.id,
             transactionSignerId: transactionSigner.id,
             documentHash: `0x${documentHash}`,
             role: transactionSigner.role
         };
-        
+
         return {
             domain,
             types,
@@ -611,6 +611,176 @@ class TransactionService {
             message
         };
 
+    }
+
+    async getFinalNotary(transactionId, walletAddress) {
+        const transaction = await prisma.transaction.findUnique({
+            where: {
+                id: transactionId
+            }
+        });
+
+        if (!transaction) {
+            throw new CustomError(Error.Transaction_Not_Found);
+        }
+
+        if (transaction.status !== transactionStatus.WAITING_FOR_NOTARY_SIGNATURE) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        const unsignedSigners = this.validateAllSignersSigned(transaction.id);
+
+        if (unsignedSigners > 0) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        if (!transaction.notaryId) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        const wallet = await prisma.wallet.findUnique({
+            where: {
+                address: walletAddress
+            }
+        });
+
+        if (!wallet) {
+            throw new CustomError(Error.The_User_Not_Found);
+        }
+
+
+        if (wallet.userId !== transaction.notaryId) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        if (transaction.notarySignature) {
+            throw new CustomError(Error.Wallet_Already_Signed);
+        }
+
+        let documentHash = transaction.txHash;
+
+        if (!documentHash) {
+            documentHash = this.hashDocument(transaction.body);
+
+            await prisma.transaction.update({
+                where: {
+                    id: transaction.id
+                },
+                data: {
+                    txHash: documentHash,
+                    chainId: CHAIN_ID,
+                    contractAddress: CONTRACT_ADDRESS
+                }
+            });
+        }
+
+        const domain = {
+            name: "Digital Notary",
+            version: "1",
+            chainId: CHAIN_ID,
+            verifyingContract: CONTRACT_ADDRESS
+        };
+
+        const types = {
+            NotaryDocument: [
+                {
+                    name: "transactionId",
+                    type: "string"
+                },
+                {
+                    name: "documentHash",
+                    type: "bytes32"
+                },
+                {
+                    name: "role",
+                    type: "string"
+                }
+            ]
+        };
+
+        const message = {
+            transactionId: transaction.id,
+            documentHash: `0x${documentHash}`,
+            role: "Notary"
+        };
+
+        return {
+            domain,
+            types,
+            primaryType: "NotaryDocument",
+            message
+        };
+    }
+
+    async signedNotaryTransaction(transactionId, walletAddress, signature) {
+
+        const transaction = await prisma.transaction.findUnique({
+            where: {
+                id: transactionId
+            }
+        });
+
+        if (!transaction) {
+            throw new CustomError(Error.Transaction_Not_Found);
+        }
+
+        if (transaction.status !== transactionStatus.WAITING_FOR_NOTARY_SIGNATURE) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        if (!transaction.notaryId) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        const wallet = await prisma.wallet.findUnique({
+            where: {
+                address: walletAddress
+            }
+        });
+
+        if (!wallet) {
+            throw new CustomError(Error.The_User_Not_Found);
+        }
+
+        if (wallet.userId !== transaction.notaryId) {
+            throw new CustomError(Error.You_Can_Not_Do_This);
+        }
+
+        if (transaction.notarySignature) {
+            throw new CustomError(Error.Wallet_Already_Signed);
+        }
+
+        const unsignedSigners = await this.validateAllSignersSigned(transactionId);
+
+        if (unsignedSigners > 0) {
+            throw new CustomError(Error.Not_All_Signers_Have_Signed);
+        }
+
+        const signData = await this.getFinalNotary(transactionId, walletAddress);
+
+        const recoveredAddress = ethers.verifyTypedData(
+            signData.domain,
+            signData.types,
+            signData.message,
+            signature
+        );
+
+        if (recoveredAddress.toLowerCase() !== wallet.address.toLowerCase()) {
+            throw new CustomError(Error.Validation_Error);
+        }
+
+        await prisma.transaction.update({
+            where: {
+                id: transactionId
+            },
+            data: {
+                notarySignature: signature,
+                notarySignedAt: new Date(),
+                status: transactionStatus.SUBMITTED
+            }
+        });
+
+        return { success: true };
     }
 
     async signedTransaction(transactionId, walletAddress, signature) {
@@ -656,7 +826,7 @@ class TransactionService {
 
         const signData = await this.getFinal(transactionId, walletAddress);
 
-        
+
         const recoveredAddress =
             ethers.verifyTypedData(
                 signData.domain,
@@ -665,7 +835,7 @@ class TransactionService {
                 signature
             );
 
-            
+
         if (recoveredAddress !== wallet.address) {
             throw new CustomError(Error.Validation_Error);
         }
@@ -679,6 +849,19 @@ class TransactionService {
                 signedAt: new Date()
             }
         });
+
+        const unsignedSigners = this.validateAllSignersSigned(transactionId);
+
+        if (unsignedSigners === 0) {
+            await prisma.transaction.update({
+                where: {
+                    id: transactionId
+                },
+                data: {
+                    status: transactionStatus.WAITING_FOR_NOTARY_SIGNATURE
+                }
+            });
+        }
 
         return { success: true };
     }
@@ -694,6 +877,15 @@ class TransactionService {
             .createHash("sha256")
             .update(json)
             .digest("hex");
+    }
+
+    validateAllSignersSigned(transactionId) {
+        return prisma.transactionSigner.count({
+            where: {
+                transactionId,
+                signature: null
+            }
+        });
     }
 }
 

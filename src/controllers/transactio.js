@@ -164,6 +164,19 @@ class TransactionController {
         responseSender(res, result);
     }
 
+    async getFinalForNotary(req,res){
+        const { walletAddress, transactionId } = req.body;
+        const result = await new TransactionService().getFinalNotary(transactionId, walletAddress);
+        responseSender(res, result);
+
+    }
+
+    async notarySignedTransaction(req,res){
+        const { walletAddress, transactionId, signature } = req.body;
+        const result = await new TransactionService().signedNotaryTransaction(transactionId, walletAddress, signature);
+        responseSender(res, result);
+    }
+
 }
 
 module.exports = new TransactionController();
