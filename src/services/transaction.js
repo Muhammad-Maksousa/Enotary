@@ -850,8 +850,8 @@ class TransactionService {
             }
         });
 
-        const unsignedSigners = this.validateAllSignersSigned(transactionId);
-
+        const unsignedSigners = await this.validateAllSignersSigned(transactionId);
+        
         if (unsignedSigners == 0) {
             await prisma.transaction.update({
                 where: {
@@ -879,7 +879,7 @@ class TransactionService {
             .digest("hex");
     }
 
-    validateAllSignersSigned(transactionId) {
+    async validateAllSignersSigned(transactionId) {
         return prisma.transactionSigner.count({
             where: {
                 transactionId,
