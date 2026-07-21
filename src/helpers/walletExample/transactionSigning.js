@@ -36,8 +36,8 @@ const types = {
 };
 
 const message = {
-    transactionId: "3c4baf94-67c4-45b4-a879-78a9168c6d32",
-    transactionSignerId: "4fd64754-e319-4208-8104-b131912ed832",
+    transactionId: "398806ec-8945-4ebc-a907-de97b86dc4ef",
+    transactionSignerId: "d129b58e-f0db-4220-ae41-679ce590aa2a",
     documentHash: "0x91a821d0428a14792c77d66b7ae5128243bff920f5b923cfb6398be1f67fa682",
     role: "bayer"
 };
