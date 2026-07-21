@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 
 
-const PRIVATE_KEY = "0x597e1a6216ac0f00107c32fa6b8acb6ffa5e5d3063cf76bd099aa1d102d6d605";
+const PRIVATE_KEY = "0x1d543e9379ee2faa38cbf32b3ccaed48d5dd951e9532e01d20caf536b7b963e0";
 
 const wallet = new ethers.Wallet(PRIVATE_KEY);
 
@@ -36,10 +36,10 @@ const types = {
 };
 
 const message = {
-    transactionId: "5ac1064a-8e43-45c9-a6f5-b9105f6ac21a",
-    transactionSignerId: "380a22de-6643-4733-b71a-88d61a988591",
-    documentHash: "0xa9b5dd3443609ee9ea61ee077bb2630e2d1aa435dd9079dd00da41aa0611d75f",
-    role: "SELLER"
+    transactionId: "3c4baf94-67c4-45b4-a879-78a9168c6d32",
+    transactionSignerId: "4fd64754-e319-4208-8104-b131912ed832",
+    documentHash: "0x91a821d0428a14792c77d66b7ae5128243bff920f5b923cfb6398be1f67fa682",
+    role: "bayer"
 };
 
 async function main() {

@@ -36,13 +36,13 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0MWY5NjRhMS03MWIyLTRl
 /*online notary
 address: 0xfC0f50a91D4Cebd05797739325cCBfF7d743f3B8
 private: 0xe5c49a26251184c1f913aa422f816c57b75db918e530a2e64f0526d87901f5d9
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0N2FiMTZkMC0zZWQ1LTRjZDctYWFkMC00MTdiNDMwYzM5NDkiLCJ3YWxsZXRJZCI6Ijc1MDI1ZTc0LTk0NzUtNDRhNS04NjhhLWZmNWM4MzU5ZWM3YiIsImFkZHJlc3MiOiIweGZDMGY1MGE5MUQ0Q2ViZDA1Nzk3NzM5MzI1Y0NCZkY3ZDc0M2YzQjgiLCJpYXQiOjE3ODMxNzIzMDYsImV4cCI6MTc4NTc2NDMwNn0.wn86s9dmSHpdc4tJOsLaHWJwMTIcC_HC5G3N0AN503M
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0MWY5NjRhMS03MWIyLTRlMTktYmI5OC1mNzI4OTBhY2NjOWUiLCJ3YWxsZXRJZCI6IjhkNzQ4OWEyLTc4OWEtNDJkYy1iZjMxLTM4YmVmNjYyNzEzYSIsImFkZHJlc3MiOiIweDgzQjJCQjE4NzU0OTZBNzJhNDNGMDI0NWVmNzYzY2MwMDc3QTNBQzYiLCJpYXQiOjE3ODQ2NjQxMDMsImV4cCI6MTc4NzI1NjEwM30.oJ2t3Vgq3hI4Jw2dXR-uIsGGECqF-omtwIFqJEAlFyM
 */
-const privateKey = "0x597e1a6216ac0f00107c32fa6b8acb6ffa5e5d3063cf76bd099aa1d102d6d605";
+const privateKey = "0x1d543e9379ee2faa38cbf32b3ccaed48d5dd951e9532e01d20caf536b7b963e0";
 
 const wallet = new Wallet(privateKey);
 
-const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x2F6332083e5608B18B908956240E322CC48057CF\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 1337\nNonce: P1OR9AAr2ihpxP5IT\nIssued At: 2026-07-18T20:21:59.504Z`;
+const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x83B2BB1875496A72a43F0245ef763cc0077A3AC6\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 1337\nNonce: 0wOFitlVnJYXbAJ9e\nIssued At: 2026-07-21T19:59:22.477Z`;
 
 async function main() {
 

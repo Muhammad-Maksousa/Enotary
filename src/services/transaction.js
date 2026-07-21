@@ -852,7 +852,7 @@ class TransactionService {
 
         const unsignedSigners = this.validateAllSignersSigned(transactionId);
 
-        if (unsignedSigners === 0) {
+        if (unsignedSigners == 0) {
             await prisma.transaction.update({
                 where: {
                     id: transactionId
