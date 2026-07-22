@@ -721,7 +721,7 @@ class TransactionService {
         });
 
         console.log("transaction: ", transaction);
-        
+
 
         if (!transaction) {
             throw new CustomError(Error.Transaction_Not_Found);
@@ -742,7 +742,7 @@ class TransactionService {
         });
 
         console.log("wallet: ", wallet);
-        
+
 
         if (!wallet) {
             throw new CustomError(Error.The_User_Not_Found);
@@ -755,27 +755,27 @@ class TransactionService {
         if (transaction.notarySignature) {
             throw new CustomError(Error.Wallet_Already_Signed);
         }
-        console.log("unsignedSigners: ", unsignedSigners);
-        
-        const unsignedSigners = await this.validateAllSignersSigned(transactionId);
 
+
+        const unsignedSigners = await this.validateAllSignersSigned(transactionId);
+        console.log("unsignedSigners: ", unsignedSigners);
         if (unsignedSigners > 0) {
             throw new CustomError(Error.Not_All_Signers_Have_Signed);
         }
 
-        console.log("signData: ",signData);
-        
-        const signData = await this.getFinalNotary(transactionId, walletAddress);
 
-        console.log("recoveredAddress: ",recoveredAddress);
-        
+
+        const signData = await this.getFinalNotary(transactionId, walletAddress);
+        console.log("signData: ", signData);
+
+
         const recoveredAddress = ethers.verifyTypedData(
             signData.domain,
             signData.types,
             signData.message,
             signature
         );
-
+        console.log("recoveredAddress: ", recoveredAddress);
         if (recoveredAddress.toLowerCase() !== wallet.address.toLowerCase()) {
             throw new CustomError(Error.Validation_Error);
         }
@@ -862,7 +862,7 @@ class TransactionService {
         });
 
         const unsignedSigners = await this.validateAllSignersSigned(transactionId);
-        
+
         if (unsignedSigners == 0) {
             await prisma.transaction.update({
                 where: {
