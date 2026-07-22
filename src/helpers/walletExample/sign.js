@@ -38,11 +38,11 @@ address: 0xfC0f50a91D4Cebd05797739325cCBfF7d743f3B8
 private: 0xe5c49a26251184c1f913aa422f816c57b75db918e530a2e64f0526d87901f5d9
 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0MWY5NjRhMS03MWIyLTRlMTktYmI5OC1mNzI4OTBhY2NjOWUiLCJ3YWxsZXRJZCI6IjhkNzQ4OWEyLTc4OWEtNDJkYy1iZjMxLTM4YmVmNjYyNzEzYSIsImFkZHJlc3MiOiIweDgzQjJCQjE4NzU0OTZBNzJhNDNGMDI0NWVmNzYzY2MwMDc3QTNBQzYiLCJpYXQiOjE3ODQ2NjQxMDMsImV4cCI6MTc4NzI1NjEwM30.oJ2t3Vgq3hI4Jw2dXR-uIsGGECqF-omtwIFqJEAlFyM
 */
-const privateKey = "0x1d543e9379ee2faa38cbf32b3ccaed48d5dd951e9532e01d20caf536b7b963e0";
+const privateKey = "0x6ffe69c54883021b5a5933760e0329723ceddc23ab98987c4f8a00228224b3c3";
 
 const wallet = new Wallet(privateKey);
 
-const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x83B2BB1875496A72a43F0245ef763cc0077A3AC6\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 1337\nNonce: 0wOFitlVnJYXbAJ9e\nIssued At: 2026-07-21T19:59:22.477Z`;
+const message = `localhost:3000 wants you to sign in with your Ethereum account:\n0x044B4d55F88f4e059523b8456BB463a2b915f538\n\nSign in to backend\n\nURI: http://localhost:3000\nVersion: 1\nChain ID: 1337\nNonce: 4Xv1iTDser53ffoDp\nIssued At: 2026-07-21T21:44:57.595Z`;
 
 async function main() {
 

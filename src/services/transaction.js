@@ -554,7 +554,7 @@ class TransactionService {
 
         if (!documentHash) {
 
-            documentHash = this.hashDocument(transaction.body);
+            documentHash = await this.hashDocument(transaction.body);
 
             await prisma.transaction.update({
                 where: {
@@ -660,7 +660,7 @@ class TransactionService {
         let documentHash = transaction.txHash;
 
         if (!documentHash) {
-            documentHash = this.hashDocument(transaction.body);
+            documentHash = await this.hashDocument(transaction.body);
 
             await prisma.transaction.update({
                 where: {
@@ -720,6 +720,9 @@ class TransactionService {
             }
         });
 
+        console.log("transaction: ", transaction);
+        
+
         if (!transaction) {
             throw new CustomError(Error.Transaction_Not_Found);
         }
@@ -738,6 +741,9 @@ class TransactionService {
             }
         });
 
+        console.log("wallet: ", wallet);
+        
+
         if (!wallet) {
             throw new CustomError(Error.The_User_Not_Found);
         }
@@ -749,15 +755,20 @@ class TransactionService {
         if (transaction.notarySignature) {
             throw new CustomError(Error.Wallet_Already_Signed);
         }
-
+        console.log("unsignedSigners: ", unsignedSigners);
+        
         const unsignedSigners = await this.validateAllSignersSigned(transactionId);
 
         if (unsignedSigners > 0) {
             throw new CustomError(Error.Not_All_Signers_Have_Signed);
         }
 
+        console.log("signData: ",signData);
+        
         const signData = await this.getFinalNotary(transactionId, walletAddress);
 
+        console.log("recoveredAddress: ",recoveredAddress);
+        
         const recoveredAddress = ethers.verifyTypedData(
             signData.domain,
             signData.types,
@@ -866,7 +877,7 @@ class TransactionService {
         return { success: true };
     }
 
-    hashDocument(body) {
+    async hashDocument(body) {
 
         const json = JSON.stringify(
             body,
