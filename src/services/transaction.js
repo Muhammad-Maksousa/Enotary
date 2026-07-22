@@ -776,7 +776,7 @@ class TransactionService {
             signature
         );
         console.log("recoveredAddress: ", recoveredAddress);
-        if (recoveredAddress.toLowerCase() != wallet.address.toLowerCase()) {
+        if (recoveredAddress !== wallet.address) {
             throw new CustomError(Error.Validation_Error);
         }
 
